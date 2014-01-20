@@ -27,7 +27,7 @@ class Banners implements BaseModelInterface
 
 			// Install our table
 			$sql = "".
-			"CREATE TABLE `$tableName` 
+			"CREATE TABLE `$tableName`
 			(
 	  			id mediumint(9) NOT NULL AUTO_INCREMENT,
 	  			created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
@@ -52,11 +52,11 @@ class Banners implements BaseModelInterface
 			add_option( "carbontwelve_buttonboard_banners_db_version", $this->tableVersion );
 
 			// Insert default first banner :)
-			$sql = "INSERT INTO `$tableName` 
+			$sql = "INSERT INTO `$tableName`
 				(
-					`created_at`, 
-					`author`, 
-					`email`, 
+					`created_at`,
+					`author`,
+					`email`,
 					`button_src`,
 					`link_url`
 				)
@@ -145,4 +145,44 @@ class Banners implements BaseModelInterface
 
 		return $this->wpdb->query($sql);
 	}
+
+    public function insert(Array $data)
+    {
+
+        if (! isset($data['created_at']))
+        {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        }
+
+        $sqlParts = array();
+        foreach ($data as $value)
+        {
+            if (is_string($value))
+            {
+                $format = '%s';
+            }else{
+                $format = '%d';
+            }
+            if (is_null($value))
+            {
+                $format = 'NULL';
+            }
+
+            $sqlParts[] = $format;
+        }
+
+        $sqlKeys     = array_keys($data);
+        foreach ($sqlKeys as &$value){ $value = '`' . $value . '`'; } unset($value);
+
+        $sqlKeys     = implode(',', $sqlKeys);
+        $sqlParts    = implode(',', $sqlParts );
+        $sqlValues   = array_values( $data );
+
+        $sql = $this->wpdb->prepare(
+            "INSERT INTO `" . $this->wpdb->prefix . $this->table . "` (". $sqlKeys .") VALUES (". $sqlParts .")",
+            $sqlValues
+        );
+
+        return $this->wpdb->query($sql);
+    }
 }

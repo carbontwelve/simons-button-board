@@ -7,18 +7,21 @@ class AdminPage
 
 	protected $flashMessages = array(
 		'success' => false,
-		'error'   => false
+		'error'   => false,
+        'errors'  => array(),
+        'inputs'  => array()
 		);
 
 	public function __construct($app)
 	{
 		$this->app = $app;
 		add_action( 'admin_menu', array( $this, 'registerAdminMenu' ) );
+        $this->flashMessages['inputs'] = $this->sanitizePost();
 	}
 
 	public function registerAdminMenu()
 	{
-		add_menu_page( 
+		add_menu_page(
 			'Simons Button Board', 										// The text to be displayed in the title tags of the page when the menu is selected
 			'Button Board', 											// The on-screen name text for the menu
 			'manage_options', 											// The capability required for this menu to be displayed to the user.
@@ -41,12 +44,16 @@ class AdminPage
 	public function add_router()
 	{
 
-		$allowedActions = array('add');
+		$allowedActions = array('add', 'save');
 		$action  = $_GET['action'];
 		if ( ! in_array($action, $allowedActions)){ $action = $allowedActions[0]; }
 
 		switch ($action)
 		{
+            case 'save':
+                echo $this->save();
+                break;
+
 			case 'add':
 			default:
 				echo $this->add();
@@ -75,7 +82,7 @@ class AdminPage
 			case 'archive':
 				$this->archive( $_GET['id'] );
 				break;
-		
+
 			case 'untrash':
 				$this->untrash( $_GET['id'] );
 				break;
@@ -93,7 +100,6 @@ class AdminPage
 
 	public function index()
 	{
-
 		// Which record types are we after?
 		$allowedTypes = array('all', 'archived', 'deleted');
 		$type  = $_GET['type'];
@@ -109,7 +115,7 @@ class AdminPage
 		);
 
 		return $this->app->renderView('index', array(
-			'data'  => $data, 
+			'data'  => $data,
 			'type'  => $type,
 			'count' => $count,
 			'flashMessages' => $this->flashMessages
@@ -123,6 +129,70 @@ class AdminPage
 			));
 	}
 
+    private function sanitizePost( )
+    {
+        $postInput = $_POST;
+
+        unset($postInput['submit']);
+
+        foreach ($postInput as &$value)
+        {
+            $value = trim(strip_tags($value));
+
+        }
+        return $postInput;
+    }
+
+    public function save()
+    {
+        // Include darth validation lib
+        require __DIR__."/../Vendor/darth/darth.php";
+
+        $validator = darth(
+            force(
+                'required',
+                'author',
+                'The Banner Author field is required'
+            ),
+            force(
+                'required|email',
+                'email',
+                'The Banner Author Email field is invalid'
+            ),
+            force(
+                'required|regex',
+                'button_src',
+                '/^(http(?:s)?\:\/\/[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,6}(?:\/?|(?:\/[\w\-]+)*)(?:\/?|\/\w+\.[a-zA-Z]{2,4}(?:\?[\w]+\=[\w\-]+)?)?(?:\&[\w]+\=[\w\-]+)*)$/',
+                'The Banner image field is invalid'
+            ),
+            force(
+                'required|regex',
+                'link_url',
+                '/^(http(?:s)?\:\/\/[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,6}(?:\/?|(?:\/[\w\-]+)*)(?:\/?|\/\w+\.[a-zA-Z]{2,4}(?:\?[\w]+\=[\w\-]+)?)?(?:\&[\w]+\=[\w\-]+)*)$/',
+                'The Banner link field is invalid'
+            )
+        );
+
+        $this->flashMessages['errors'] = $validator( $this->flashMessages['inputs'] );
+        if ( count($this->flashMessages['errors']) > 0 ){
+            $this->flashMessages['error']   = "Sorry, your form could not be saved as its not valid. ";
+            return $this->add();
+        }else{
+
+            $model  = $this->app->getModel('banners');
+            $result = $model->insert($this->flashMessages['inputs']);
+
+            if ($result === false)
+            {
+                $this->flashMessages['error'] = "Sorry there was an error saving that form.";
+                return $this->add();
+            }else{
+                $this->flashMessages['success'] = $result . " banner has been saved.";
+                return $this->index();
+            }
+        }
+    }
+
 	public function unarchive ( $recordID = null )
 	{
 		$model  = $this->app->getModel('banners');
@@ -132,7 +202,7 @@ class AdminPage
 		{
 			$this->flashMessages['error']   = 'There was an error unarchiving that banner.';
 		}else{
-			$this->flashMessages['success'] = '1 banner unarchived. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=archive&amp;id='.$recordID.'">Undo</a>'; 
+			$this->flashMessages['success'] = '1 banner unarchived. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=archive&amp;id='.$recordID.'">Undo</a>';
 		}
 
 		echo $this->index();
@@ -147,7 +217,7 @@ class AdminPage
 		{
 			$this->flashMessages['error']   = 'There was an error archiving that banner.';
 		}else{
-			$this->flashMessages['success'] = '1 banner archived. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=unarchive&amp;id='.$recordID.'">Undo</a>'; 
+			$this->flashMessages['success'] = '1 banner archived. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=unarchive&amp;id='.$recordID.'">Undo</a>';
 		}
 
 		echo $this->index();
@@ -157,12 +227,12 @@ class AdminPage
 	{
 		$model  = $this->app->getModel('banners');
 		$result = $model->update($recordID, array( 'deleted_at' => date('Y-m-d H:i:s') ));
-		
+
 		if ($result === false)
 		{
 			$this->flashMessages['error']   = 'There was an error moving that banner to the trash.';
 		}else{
-			$this->flashMessages['success'] = '1 banner moved to the Trash. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=untrash&amp;id='.$recordID.'">Undo</a>'; 
+			$this->flashMessages['success'] = '1 banner moved to the Trash. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=untrash&amp;id='.$recordID.'">Undo</a>';
 		}
 
 		echo $this->index();
@@ -172,12 +242,12 @@ class AdminPage
 	{
 		$model  = $this->app->getModel('banners');
 		$result = $model->update($recordID, array( 'deleted_at' => NULL ));
-		
+
 		if ($result === false)
 		{
 			$this->flashMessages['error']   = 'There was an error moving that banner out of the trash.';
 		}else{
-			$this->flashMessages['success'] = '1 banner removed from the Trash. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=trash&amp;id='.$recordID.'">Undo</a>'; 
+			$this->flashMessages['success'] = '1 banner removed from the Trash. <a href="'.admin_url().'admin.php?page=button_board_index&amp;action=trash&amp;id='.$recordID.'">Undo</a>';
 		}
 
 		echo $this->index();
