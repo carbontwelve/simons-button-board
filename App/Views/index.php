@@ -43,23 +43,38 @@
     <table class="wp-list-table widefat fixed buttons" cellspacing="0">
         <thead>
         <tr>
-            <th scope="col" id="id">ID</th>
-            <th scope="col" id="url">Url</th>
+            <th scope="col" id="id" style="width:20px;text-align: center;">ID</th>
+            <th scope="col" id="url" style="width:200px">Url</th>
             <th scope="col" id="author">Author</th>
             <th scope="col" id="date">Created</th>
-            <th scope="col" id="button">Button</th>
+            <th scope="col" id="button" style="width:88px;">Button</th>
+            <th scope="col" id="views" style="width:50px;text-align: center;">Views</th>
+            <th scope="col" id="hits" style="width:50px;text-align: center;">Clicks</th>
+            <th scope="col" id="ctr" style="width:50px;text-align: center;">CTR</th>
             <th scope="col" id="actions">Actions</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($data as $row) { ?>
             <tr>
-                <td><?php echo $row->id; ?></td>
-                <td><?php echo $row->link_url; ?></td>
+                <td style="text-align: center;vertical-align:middle;"><?php echo $row->id; ?></td>
+                <td style="vertical-align:middle;"><?php echo $row->link_url; ?></td>
                 <td><?php echo $row->author; ?><br/><?php echo $row->email; ?></td>
-                <td><?php echo date('Y/m/d', strtotime($row->created_at)); ?></td>
-                <td><img src="<?php echo $row->button_src; ?>" width="88" height="31"></td>
-                <td>
+                <td style="vertical-align:middle;"><?php echo date('Y/m/d', strtotime($row->created_at)); ?></td>
+                <td style="text-align: center;"><img src="<?php echo $row->button_src; ?>" width="88" height="31"></td>
+                <td style="text-align: center;vertical-align:middle;"><?php echo $row->views; ?></td>
+                <td style="text-align: center;vertical-align:middle;"><?php echo $row->clicks; ?></td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <?php
+                    if ($row->views == 0)
+                    {
+                        echo '&ndash;';
+                    }else{
+                        echo round($row->clicks / $row->views) . '%';
+                    }
+                    ?>
+                </td>
+                <td style="vertical-align:middle;">
                     <a href="<?php echo admin_url(); ?>admin.php?page=button_board_edit&amp;id=<?php echo $row->id; ?>">
                         Edit
                     </a>
