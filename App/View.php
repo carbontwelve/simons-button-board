@@ -8,7 +8,8 @@
  * @since 1.0.0
  * @link http://stackoverflow.com/a/14144286/1225977
  */
-class View{
+class View
+{
     /**
      * Template Directory
      */
@@ -17,27 +18,30 @@ class View{
     /**
      * Initialize a new view context.
      */
-    public function __construct($templateDirectory) {
+    public function __construct($templateDirectory)
+    {
         $this->templateDirectory = $templateDirectory;
     }
 
     /**
      * Safely escape/encode the provided data.
      */
-    public function h($data) {
-        return htmlspecialchars((string) $data, ENT_QUOTES, 'UTF-8');
+    public function h($data)
+    {
+        return htmlspecialchars((string)$data, ENT_QUOTES, 'UTF-8');
     }
 
     /**
      * Render the template, returning it's content.
-     * @param string $template, template file
+     * @param string $template , template file
      * @param array $data Data made available to the view.
      * @return string The rendered template.
      */
-    public function render($template, Array $data) {
+    public function render($template, Array $data)
+    {
         extract($data);
         ob_start();
-        include( $this->templateDirectory . $template . '.php');
+        include($this->templateDirectory . $template . '.php');
         $content = ob_get_contents();
         ob_end_clean();
         return $content;

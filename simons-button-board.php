@@ -1,4 +1,5 @@
 <?php namespace Carbontwelve\ButtonBoard;
+
 /**
  * Plugin Name: Simons Button Board
  * Description: An Updated Bubs Button Board, PHP 5.3+ Only.
@@ -18,13 +19,13 @@ use Exception;
 require __DIR__ . '/Vendor/SplClassLoader.php';
 
 $loader = new SplClassLoader('Carbontwelve\ButtonBoard', __DIR__);
-if ( ! $loader->register()) {
-        throw new Exception('Unable to initialize the autoloader.');
+if (!$loader->register()) {
+    throw new Exception('Unable to initialize the autoloader.');
 }
 
 // Check PHP version is > 5.3 before initiating the class loader as most features
 // of PHP that I use here are 5.3+ and possibly even 5.4+ (needs testing on old systems running *obsolete* versions of PHP)
-// Some useful help found here: 
+// Some useful help found here:
 // http://wordpress.stackexchange.com/questions/63668/autoloading-namespaces-in-wordpress-plugins-themes-can-it-work
 
 // Start Button Board Plugin
