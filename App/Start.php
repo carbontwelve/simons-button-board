@@ -41,6 +41,9 @@ class Start
             $this->app->install($this->version);
         }
 
+        // Add Routing Layer
+        new Router($this->app);
+
         // Add Pages to administration
         new AdminPage($this->app);
 
