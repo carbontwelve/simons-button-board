@@ -17,6 +17,8 @@ Class App
     protected $models = array();
     /** @var \wpdb Wordpress database class */
     protected $wpdb;
+    /** @var \Carbontwelve\ButtonBoard\App\Rewrite  */
+    protected $rewriter;
 
     /**
      * Setup our plugin environment
@@ -27,10 +29,11 @@ Class App
     {
         /** @var \wpdb $wpdb */
         global $wpdb;
-        $this->wpdb = $wpdb;
-        $this->path = $path;
+        $this->wpdb      = $wpdb;
+        $this->path      = $path;
         $this->pluginUrl = $pluginUrl;
-        $this->view = new View($this->path . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR);
+        $this->view      = new View($this->path . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR);
+        $this->rewriter  = new Rewrite($this);
     }
 
     /**
@@ -42,6 +45,11 @@ Class App
     public function registerModel($className, $class)
     {
         $this->models[$className] = new $class($this->wpdb, $this);
+    }
+
+    public function getRewriter()
+    {
+        return $this->rewriter;
     }
 
     /**

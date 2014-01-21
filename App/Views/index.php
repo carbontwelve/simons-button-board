@@ -70,7 +70,7 @@
                     {
                         echo '&ndash;';
                     }else{
-                        echo round($row->clicks / $row->views) . '%';
+                        echo round($row->clicks / $row->views, 2) . '%';
                     }
                     ?>
                 </td>

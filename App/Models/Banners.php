@@ -5,7 +5,7 @@ class Banners implements BaseModelInterface
 
     protected $app;
 
-    /** @var wpdb */
+    /** @var \wpdb */
     protected $wpdb;
     /** @var string $table Table name */
     protected $table = 'buttons';
@@ -102,6 +102,13 @@ class Banners implements BaseModelInterface
     {
         $query = 'SELECT * FROM ' . $this->getQueryEnd($type);
         return $this->wpdb->get_results($query);
+    }
+
+    public function get( $recordID = null )
+    {
+        $query = "SELECT * FROM `" . $this->wpdb->prefix . $this->table . "` WHERE `id` = %d AND `deleted_at` IS NULL AND `enabled` = TRUE";
+        $query = $this->wpdb->prepare($query, $recordID);
+        return $this->wpdb->get_row($query);
     }
 
     public function count($type = 'all')

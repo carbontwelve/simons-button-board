@@ -1,10 +1,13 @@
 <?php namespace Carbontwelve\ButtonBoard\App;
 
 /**
+ * Class View
+ *
  * View-specific wrapper.
  * Limits the accessible scope available to templates.
  * @author Martin Samson
  * @author Simon Dann
+ * @package Carbontwelve\ButtonBoard\App
  * @since 1.0.0
  * @link http://stackoverflow.com/a/14144286/1225977
  */
