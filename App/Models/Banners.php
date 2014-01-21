@@ -5,7 +5,7 @@ class Banners implements BaseModelInterface
 
 	protected $app;
 
-	/** @var /WPDB Instance of Wordpress $wpdb */
+	/** @var wpdb */
 	protected $wpdb;
 	/** @var string $table Table name */
 	protected $table        = 'buttons';
@@ -113,6 +113,10 @@ class Banners implements BaseModelInterface
 
 	public function update($id = null, Array $data)
 	{
+        if (! isset($data['updated_at']))
+        {
+            $data['updated_at'] = date('Y-m-d H:i:s');
+        }
 
 		$sqlParts = array();
 		foreach ($data as $key => $value)
@@ -129,6 +133,11 @@ class Banners implements BaseModelInterface
 			}
 
 			$sqlParts[] = '`' . $key . '` = ' . $format;
+
+            if ($format == 'NULL')
+            {
+                unset($data[$key]);
+            }
 		}
 
 		$sqlParts    = implode( ',', $sqlParts );
