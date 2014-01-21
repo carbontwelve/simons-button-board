@@ -43,6 +43,7 @@ class Banners implements BaseModelInterface
 	  			views mediumint(9) NOT NULL,
 	  			clicks mediumint(9) NOT NULL,
 	  			archived tinyint(1) DEFAULT FALSE NOT NULL,
+	  			enabled tinyint(1) DEFAULT FALSE NOT NULL,
 	  			UNIQUE KEY id (id)
 	    	);";
 

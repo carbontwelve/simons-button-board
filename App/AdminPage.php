@@ -67,7 +67,7 @@ class AdminPage
     {
 
         // Which "route" is this?
-        $allowedActions = array('index', 'disable', 'ban', 'archive', 'unarchive', 'trash', 'untrash');
+        $allowedActions = array('index', 'disable', 'enable', 'ban', 'archive', 'unarchive', 'trash', 'untrash');
         $action = $_GET['action'];
         if (!in_array($action, $allowedActions)) {
             $action = $allowedActions[0];
@@ -76,6 +76,14 @@ class AdminPage
         // Route to the correct method...
 
         switch ($action) {
+
+            case 'disable':
+                $this->disable($_GET['id']);
+                break;
+
+            case 'enable':
+                $this->enable($_GET['id']);
+                break;
 
             case 'unarchive':
                 $this->unarchive($_GET['id']);
@@ -147,7 +155,6 @@ class AdminPage
 
         foreach ($postInput as &$value) {
             $value = trim(strip_tags($value));
-
         }
         return $postInput;
     }
@@ -258,6 +265,35 @@ class AdminPage
                 ) . 'admin.php?page=button_board_index&amp;action=trash&amp;id=' . $recordID . '">Undo</a>';
         }
 
+        echo $this->index();
+    }
+
+    private function disable($recordID = null)
+    {
+        $model = $this->app->getModel('banners');
+        $result = $model->update($recordID, array('enabled' => 0));
+
+        if ($result === false) {
+            $this->flashMessages['error'] = 'There was an error disabling that banner.';
+        } else {
+            $this->flashMessages['success'] = '1 banner disabled. <a href="' . admin_url(
+                ) . 'admin.php?page=button_board_index&amp;action=enable&amp;id=' . $recordID . '">Undo</a>';
+        }
+
+        echo $this->index();
+    }
+
+    private function enable($recordID = null)
+    {
+        $model = $this->app->getModel('banners');
+        $result = $model->update($recordID, array('enabled' => 1));
+
+        if ($result === false) {
+            $this->flashMessages['error'] = 'There was an error enabling that banner.';
+        } else {
+            $this->flashMessages['success'] = '1 banner enabled. <a href="' . admin_url(
+                ) . 'admin.php?page=button_board_index&amp;action=disable&amp;id=' . $recordID . '">Undo</a>';
+        }
         echo $this->index();
     }
 

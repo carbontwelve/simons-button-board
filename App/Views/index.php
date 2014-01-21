@@ -75,14 +75,24 @@
                     ?>
                 </td>
                 <td style="vertical-align:middle;">
+
+                    <?php if (is_null($row->deleted_at)) { ?>
+
                     <a href="<?php echo admin_url(); ?>admin.php?page=button_board_edit&amp;id=<?php echo $row->id; ?>">
                         Edit
                     </a>
                     |
+                    <?php if ($row->enabled < 1) { ?>
+                    <a href="<?php echo admin_url(
+                    ); ?>admin.php?page=button_board_index&amp;action=enable&amp;id=<?php echo $row->id; ?>">
+                        Enable
+                    </a>
+                    <?php }else{ ?>
                     <a href="<?php echo admin_url(
                     ); ?>admin.php?page=button_board_index&amp;action=disable&amp;id=<?php echo $row->id; ?>">
                         Disable
                     </a>
+                    <?php } ?>
                     |
                     <?php if ($row->archived < 1) { ?>
                         <a href="<?php echo admin_url(
@@ -96,11 +106,21 @@
                         </a>
                     <?php } ?>
                     |
-                    <a href="<?php echo admin_url(
-                    ); ?>admin.php?page=button_board_index&amp;action=ban&amp;id=<?php echo $row->id; ?>">
+                    <?php }else{ ?>
+                        Edit | Disable | Archive |
+                    <?php } ?>
+
+                    <?php if ($row->archived < 1) { ?>
+                        <a href="<?php echo admin_url(
+                        ); ?>admin.php?page=button_board_index&amp;action=ban&amp;id=<?php echo $row->id; ?>">
+                            Ban
+                        </a>
+                    <?php }else{?>
                         Ban
-                    </a>
+                    <?php } ?>
                     |
+
+                    <?php if ($row->archived < 1) { ?>
                     <?php if (is_null($row->deleted_at)) { ?>
                         <a class="submitdelete" href="<?php echo admin_url(
                         ); ?>admin.php?page=button_board_index&amp;action=trash&amp;id=<?php echo $row->id; ?>">
@@ -111,6 +131,9 @@
                         ); ?>admin.php?page=button_board_index&amp;action=untrash&amp;id=<?php echo $row->id; ?>">
                             Untrash
                         </a>
+                    <?php } ?>
+                    <?php }else{ ?>
+                        Trash
                     <?php } ?>
                 </td>
             </tr>
