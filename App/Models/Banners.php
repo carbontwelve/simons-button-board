@@ -17,10 +17,9 @@ class Banners implements BaseModelInterface
         'count'       => 0,
         'currentPage' => 1,
         'lastPage'    => 1,
-        'perPage'     => 2,
+        'perPage'     => 10,
         'from'        => 0,
         'to'          => 10
-
     );
 
     public function __construct($wpdb, $app)
@@ -116,7 +115,6 @@ class Banners implements BaseModelInterface
 
     public function getPaginated($type = 'all')
     {
-
         if (isset($_GET['paged']) && is_numeric( $_GET['paged']) && $_GET['paged'] > 0 )
         {
             $this->pagination['currentPage'] = intval( $_GET['paged'] );
@@ -135,7 +133,7 @@ class Banners implements BaseModelInterface
 
         // Current Page cant be less than 1
         if ($this->pagination['currentPage'] < 1 ){
-            $this->pagination = 1;
+            $this->pagination['currentPage'] = 1;
         }
 
         // Offset
@@ -143,9 +141,6 @@ class Banners implements BaseModelInterface
         $this->pagination['to']   = $this->pagination['perPage'];
 
         $query = 'SELECT * FROM ' . $this->getQueryEnd($type) . ' ' . $this->wpdb->prepare('LIMIT %d, %d ', array( $this->pagination['from'], $this->pagination['to'] ));
-
-        var_dump($query);
-
         return $this->wpdb->get_results($query);
     }
 
@@ -192,24 +187,17 @@ class Banners implements BaseModelInterface
             }
         }
 
-        $sqlParts = implode(',', $sqlParts);
+        $sqlParts  = implode(',', $sqlParts);
         $sqlValues = array_values($data);
-
-        //var_dump($sqlValues);
-
-        $sql = $this->wpdb->prepare(
+        $sql       = $this->wpdb->prepare(
             "UPDATE `" . $this->wpdb->prefix . $this->table . "` SET " . $sqlParts . " WHERE `id` = " . intval($id),
             $sqlValues
         );
-
-        //var_dump($sql);
-
         return $this->wpdb->query($sql);
     }
 
     public function insert(Array $data)
     {
-
         if (!isset($data['created_at'])) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }

@@ -26,9 +26,8 @@ class Rewrite
      */
     public function add_rewrite_rules($wp_rewrite){
         $rules = array(
-            'button/out/(.+?)/?$' => 'index.php?banner_id=$matches[1]',
+            'button/out/(.+?)?$' => 'index.php?banner_id=$matches[1]',
         );
-
         $wp_rewrite->rules = $rules + (array)$wp_rewrite->rules;
     }
 
@@ -36,7 +35,7 @@ class Rewrite
      * @param $query
      * @return void
      */
-    public function pre_get_posts( $query ) {
+    public function pre_get_posts( $query ){
         if ( ! is_admin() && $query->is_main_query() && $query->get( 'banner_id' ) ) { // check if user asked for a non-admin page and that query contains except_category_name var
 
             $recordID = intval($query->get( 'banner_id' ));
@@ -54,7 +53,6 @@ class Rewrite
                 header("Location: http://google.com", true, 302);
                 exit;
             }
-
             // else 404
         }
     }

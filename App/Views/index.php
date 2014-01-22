@@ -148,11 +148,7 @@
         <?php } ?>
         </tbody>
     </table>
-
-    <?php var_dump($pagination); ?>
-
     <div class="tablenav bottom">
-
         <div class="alignleft actions bulkactions">
             <select name="action2">
                 <option value="-1" selected="selected">Bulk Actions</option>
@@ -165,7 +161,6 @@
         </div>
         <div class="alignleft actions">
         </div>
-
         <div class="tablenav-pages <?php if ($pagination['lastPage'] == 0 || $pagination['lastPage'] == 1){ echo 'one-page'; } ?>"><span class="displaying-num"><?php echo $pagination['count']; ?> items</span>
             <span class="pagination-links">
                 <a class="first-page <?php if ( $pagination['currentPage'] == 1 ){ ?>disabled<?php } ?>" title="Go to the first page" href="admin.php?page=button_board_index&amp;type=<?php echo $type; ?>">«</a>
@@ -177,5 +172,4 @@
         </div>
         <br class="clear">
     </div>
-
 </div>
