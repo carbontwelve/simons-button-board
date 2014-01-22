@@ -144,14 +144,14 @@ class Banners implements BaseModelInterface
         $sqlParts = implode(',', $sqlParts);
         $sqlValues = array_values($data);
 
-        var_dump($sqlValues);
+        //var_dump($sqlValues);
 
         $sql = $this->wpdb->prepare(
             "UPDATE `" . $this->wpdb->prefix . $this->table . "` SET " . $sqlParts . " WHERE `id` = " . intval($id),
             $sqlValues
         );
 
-        var_dump($sql);
+        //var_dump($sql);
 
         return $this->wpdb->query($sql);
     }
