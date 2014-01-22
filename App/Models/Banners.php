@@ -12,6 +12,17 @@ class Banners implements BaseModelInterface
     /** @var string $tableVersion Version of this table */
     protected $tableVersion = "1.0.0";
 
+    /** @var array Pagination details */
+    protected $pagination = array(
+        'count'       => 0,
+        'currentPage' => 1,
+        'lastPage'    => 1,
+        'perPage'     => 2,
+        'from'        => 0,
+        'to'          => 10
+
+    );
+
     public function __construct($wpdb, $app)
     {
         $this->wpdb = $wpdb;
@@ -96,6 +107,46 @@ class Banners implements BaseModelInterface
         }
 
         return $query;
+    }
+
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    public function getPaginated($type = 'all')
+    {
+
+        if (isset($_GET['paged']) && is_numeric( $_GET['paged']) && $_GET['paged'] > 0 )
+        {
+            $this->pagination['currentPage'] = intval( $_GET['paged'] );
+        }else{
+            $this->pagination['currentPage'] = 1;
+        }
+
+        $this->pagination['count']       = $this->count($type);
+        $this->pagination['lastPage']    = ceil( $this->pagination['count'] / $this->pagination['perPage'] );
+
+        // Current Page cant be greater than Last Page
+        if ($this->pagination['currentPage'] > $this->pagination['lastPage'])
+        {
+            $this->pagination['currentPage'] = $this->pagination['lastPage'];
+        }
+
+        // Current Page cant be less than 1
+        if ($this->pagination['currentPage'] < 1 ){
+            $this->pagination = 1;
+        }
+
+        // Offset
+        $this->pagination['from'] = ($this->pagination['currentPage'] - 1) * $this->pagination['perPage'];
+        $this->pagination['to']   = $this->pagination['perPage'];
+
+        $query = 'SELECT * FROM ' . $this->getQueryEnd($type) . ' ' . $this->wpdb->prepare('LIMIT %d, %d ', array( $this->pagination['from'], $this->pagination['to'] ));
+
+        var_dump($query);
+
+        return $this->wpdb->get_results($query);
     }
 
     public function getAll($type = 'all')

@@ -118,7 +118,7 @@ class AdminPage
         }
 
         $model = $this->app->getModel('banners');
-        $data = $model->getAll($type);
+        $data  = $model->getPaginated($type);
 
         $count = array(
             'all' => $model->count('all'),
@@ -129,6 +129,7 @@ class AdminPage
         return $this->app->renderView(
             'index',
             array(
+                'pagination' => $model->getPagination(),
                 'data' => $data,
                 'type' => $type,
                 'count' => $count,

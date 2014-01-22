@@ -149,6 +149,8 @@
         </tbody>
     </table>
 
+    <?php var_dump($pagination); ?>
+
     <div class="tablenav bottom">
 
         <div class="alignleft actions bulkactions">
@@ -163,12 +165,14 @@
         </div>
         <div class="alignleft actions">
         </div>
-        <div class="tablenav-pages one-page"><span class="displaying-num">17 items</span>
-            <span class="pagination-links"><a class="first-page disabled" title="Go to the first page" href="http://dev.photogabble.local/wp-admin/edit.php">«</a>
-                <a class="prev-page disabled" title="Go to the previous page" href="http://dev.photogabble.local/wp-admin/edit.php?paged=1">‹</a>
-                <span class="paging-input">1 of <span class="total-pages">1</span></span>
-                <a class="next-page disabled" title="Go to the next page" href="http://dev.photogabble.local/wp-admin/edit.php?paged=1">›</a>
-                <a class="last-page disabled" title="Go to the last page" href="http://dev.photogabble.local/wp-admin/edit.php?paged=1">»</a>
+
+        <div class="tablenav-pages <?php if ($pagination['lastPage'] == 0 || $pagination['lastPage'] == 1){ echo 'one-page'; } ?>"><span class="displaying-num"><?php echo $pagination['count']; ?> items</span>
+            <span class="pagination-links">
+                <a class="first-page <?php if ( $pagination['currentPage'] == 1 ){ ?>disabled<?php } ?>" title="Go to the first page" href="admin.php?page=button_board_index&amp;type=<?php echo $type; ?>">«</a>
+                <a class="prev-page <?php if ( ($pagination['currentPage'] - 1) < 1 ) { ?>disabled<?php } ?>" title="Go to the previous page" href="admin.php?page=button_board_index&amp;paged=<?php echo $pagination['currentPage'] - 1; ?>&amp;type=<?php echo $type; ?>">‹</a>
+                <span class="paging-input"><?php echo $pagination['currentPage']; ?> of <span class="total-pages"><?php echo $pagination['lastPage']; ?></span></span>
+                <a class="next-page <?php if ( ($pagination['currentPage'] + 1) > $pagination['lastPage'] ) { ?>disabled<?php } ?>" title="Go to the next page" href="admin.php?page=button_board_index&amp;paged=<?php echo $pagination['currentPage'] + 1; ?>&amp;type=<?php echo $type; ?>">›</a>
+                <a class="last-page <?php if ( $pagination['lastPage'] == 1 || ( $pagination['currentPage'] == $pagination['lastPage'] ) ){ ?>disabled<?php } ?>" title="Go to the last page" href="admin.php?page=button_board_index&amp;paged=<?php echo $pagination['lastPage']; ?>&amp;type=<?php echo $type; ?>">»</a>
             </span>
         </div>
         <br class="clear">
