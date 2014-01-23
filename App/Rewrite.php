@@ -46,14 +46,11 @@ class Rewrite
 
             if (!is_null($result))
             {
-
                 $model->update( $recordID, array('clicks' => ($result->clicks + 1)));
-
-                var_dump( $result ); die();
-                header("Location: http://google.com", true, 302);
+                header("Location: " . $result->link_url, true, 302);
                 exit;
             }
-            // else 404
+            $query->is_404 = true;
         }
     }
 
