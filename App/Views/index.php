@@ -4,16 +4,7 @@
         <a href="<?php echo admin_url(); ?>admin.php?page=button_board_add" class="add-new-h2">Add New</a>
     </h2>
 
-    <?php if ($flashMessages['success'] !== false) { ?>
-        <div id="message" class="updated below-h2">
-            <p><?php echo $flashMessages['success']; ?></p>
-        </div>
-    <?php } ?>
-    <?php if ($flashMessages['error'] !== false) { ?>
-        <div id="message" class="error below-h2">
-            <p><?php echo $flashMessages['error']; ?></p>
-        </div>
-    <?php } ?>
+    <?php include('elements/flash_messages.php'); ?>
 
     <ul class="subsubsub">
         <li class="all">
