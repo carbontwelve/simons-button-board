@@ -31,6 +31,15 @@ if (!$loader->register()) {
 // Start Button Board Plugin
 $buttonBoard = new \Carbontwelve\ButtonBoard\App\Start;
 
+/**
+ *
+ * @param int $numberOfButtons
+ */
+function simons_plugboard($numberOfButtons = 6)
+{
+    echo 'rar!';
+}
+
 // Register actions for plugin activation/deactivation
 register_activation_hook( __FILE__, array($buttonBoard, 'activated') );
 register_deactivation_hook( __FILE__, array($buttonBoard, 'deactivated') );
