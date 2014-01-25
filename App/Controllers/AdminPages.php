@@ -1,26 +1,21 @@
-<?php namespace Carbontwelve\ButtonBoard\App;
+<?php namespace Carbontwelve\ButtonBoard\App\Controllers;
 
-class AdminPage
+class AdminPages extends Controller
 {
 
-    /** @var \Carbontwelve\ButtonBoard\App\App */
-    protected $app;
-
-    protected $flashMessages = array(
-        'success' => false,
-        'error' => false,
-        'errors' => array(),
-        'inputs' => array()
-    );
-
     /**
-     * @param $app \Carbontwelve\ButtonBoard\App\App
+     * @inherit
      */
-    public function __construct($app)
+    public function __construct( \Carbontwelve\ButtonBoard\App\App $app )
     {
-        $this->app = $app;
+        parent::__construct( $app );
+
+        // Double check that we are an admin
+        // @todo: figure out how to make this do a nice "wordpress" not authorised page
+        if (! is_admin() ){ exit('You are not authorised to view this area.'); }
+
         add_action('admin_menu', array($this, 'registerAdminMenu'));
-        $this->flashMessages['inputs'] = $this->sanitizePost();
+        $this->flashMessages['inputs'] = $this->sanitizeInputs();
     }
 
     public function registerAdminMenu()
@@ -172,22 +167,10 @@ class AdminPage
         );
     }
 
-    private function sanitizePost()
-    {
-        $postInput = $_POST;
-
-        unset($postInput['submit']);
-
-        foreach ($postInput as &$value) {
-            $value = trim(strip_tags($value));
-        }
-        return $postInput;
-    }
-
     public function save()
     {
         // Include darth validation lib
-        require __DIR__ . "/../Vendor/darth/darth.php";
+        require __DIR__ . "/../../Vendor/darth/darth.php";
 
         $validator = darth(
             force(
@@ -339,4 +322,5 @@ class AdminPage
         return true;
 
     }
+
 }

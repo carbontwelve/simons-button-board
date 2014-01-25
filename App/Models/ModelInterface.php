@@ -1,7 +1,7 @@
 <?php namespace Carbontwelve\ButtonBoard\App\Models;
 
 
-interface BaseModelInterface
+interface ModelInterface
 {
 
     public function install();

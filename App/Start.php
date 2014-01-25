@@ -7,14 +7,19 @@ define(__NAMESPACE__ . '\PLUGIN_URL', plugins_url('simons-button-board/'));
 class Start
 {
 
-    /** @var \Carbontwelve\ButtonBoard\App\App  */
+    /**
+     * Local Instance of the App class
+     * @var \Carbontwelve\ButtonBoard\App\App  */
     protected $app;
 
-    /** @var Plugin Version * */
+    /**
+     * Plugin Version
+     * @var string */
     protected $version = "1.0.0";
 
     /**
      * Check to see if plugin is loaded, and if so fire $this->loaded
+     * This is pretty much a bootstrap file as it is only fired by wordpress on the plugins_loaded action.
      */
     public function __construct()
     {
@@ -45,6 +50,7 @@ class Start
      */
     public function activated()
     {
+        /** @var \WP_Rewrite $wp_rewrite */
         global $wp_rewrite; $wp_rewrite->flush_rules();
     }
 
@@ -54,6 +60,7 @@ class Start
     public function deactivated()
     {
         remove_action( 'generate_rewrite_rules', array($this->rewriter, 'add_rewrite_rules') );
+        /** @var \WP_Rewrite $wp_rewrite */
         global $wp_rewrite; $wp_rewrite->flush_rules();
     }
 
@@ -72,7 +79,7 @@ class Start
         // Add Pages to administration
         if (is_admin())
         {
-            new AdminPage($this->app);
+            new \Carbontwelve\ButtonBoard\App\Controllers\AdminPages($this->app);
         }
 
         // Register short codes

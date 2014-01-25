@@ -1,33 +1,31 @@
 <?php namespace Carbontwelve\ButtonBoard\App\Models;
 
-class Banners implements BaseModelInterface
+class Banners extends Model implements ModelInterface
 {
 
-    protected $app;
-
-    /** @var \wpdb */
-    protected $wpdb;
-    /** @var string $table Table name */
+    /**
+     * Table Name
+     * @var string|null $table */
     protected $table = 'buttons';
-    /** @var string $tableVersion Version of this table */
-    protected $tableVersion = "1.0.0";
 
-    /** @var array Pagination details */
-    protected $pagination = array(
-        'count'       => 0,
-        'currentPage' => 1,
-        'lastPage'    => 1,
-        'perPage'     => 10,
-        'from'        => 0,
-        'to'          => 10
+    /**
+     * Mass assignable values
+     * @var array
+     */
+    protected $allowed = array(
+        'author',
+        'email',
+        'link_url',
+        'button_src',
+        'views',
+        'clicks',
+        'archived',
+        'enabled'
     );
 
-    public function __construct($wpdb, $app)
-    {
-        $this->wpdb = $wpdb;
-        $this->app = $app;
-    }
-
+    /**
+     * Install/Update the buttons table
+     */
     public function install()
     {
         $tableName = $this->wpdb->prefix . $this->table;
@@ -106,11 +104,6 @@ class Banners implements BaseModelInterface
         }
 
         return $query;
-    }
-
-    public function getPagination()
-    {
-        return $this->pagination;
     }
 
     public function getPaginated($type = 'all')
@@ -198,6 +191,8 @@ class Banners implements BaseModelInterface
 
     public function insert(Array $data)
     {
+        $data = $this->filterDataByAllowed($data);
+
         if (!isset($data['created_at'])) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }
