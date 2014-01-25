@@ -68,7 +68,7 @@ class AdminPage
     {
 
         $allowedActions = array('add', 'save');
-        $action = $_GET['action'];
+        $action         = ( isset($_GET['action']) ) ? $_GET['action'] : $allowedActions[0];
         if (!in_array($action, $allowedActions)) {
             $action = $allowedActions[0];
         }
@@ -91,9 +91,9 @@ class AdminPage
 
         // Which "route" is this?
         $allowedActions = array('index', 'disable', 'enable', 'ban', 'archive', 'unarchive', 'trash', 'untrash');
-        $action = $_GET['action'];
+        $action         = ( isset($_GET['action']) ) ? $_GET['action'] : $allowedActions[0];
         if (!in_array($action, $allowedActions)) {
-            $action = $allowedActions[0];
+            $action     = $allowedActions[0];
         }
 
         // Route to the correct method...
@@ -135,9 +135,9 @@ class AdminPage
     {
         // Which record types are we after?
         $allowedTypes = array('all', 'archived', 'deleted');
-        $type = $_GET['type'];
+        $type         = ( isset($_GET['type']) ) ? $_GET['type'] : $allowedTypes[0];
         if (!in_array($type, $allowedTypes)) {
-            $type = $allowedTypes[0];
+            $type     = $allowedTypes[0];
         }
 
         /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
