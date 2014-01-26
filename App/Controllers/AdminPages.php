@@ -1,4 +1,4 @@
-<?php namespace Carbontwelve\ButtonBoard\App\Controllers;
+<?php namespace Carbontwelve\ButtonBoard\Controllers;
 
 class AdminPages extends Controller
 {
@@ -6,7 +6,7 @@ class AdminPages extends Controller
     /**
      * @inherit
      */
-    public function __construct( \Carbontwelve\ButtonBoard\App\App $app )
+    public function __construct( \Carbontwelve\ButtonBoard\App $app )
     {
         parent::__construct( $app );
 
@@ -135,7 +135,7 @@ class AdminPages extends Controller
             $type     = $allowedTypes[0];
         }
 
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $data  = $model->getPaginated($type);
 
@@ -203,7 +203,7 @@ class AdminPages extends Controller
             return $this->add();
         } else {
 
-            /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+            /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
             $model = $this->app->getModel('banners');
             $result = $model->insert($this->flashMessages['inputs']);
 
@@ -219,7 +219,7 @@ class AdminPages extends Controller
 
     public function unarchive($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('archived' => 0));
 
@@ -235,7 +235,7 @@ class AdminPages extends Controller
 
     public function archive($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('archived' => 1));
 
@@ -251,7 +251,7 @@ class AdminPages extends Controller
 
     public function trash($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('deleted_at' => date('Y-m-d H:i:s')));
 
@@ -267,7 +267,7 @@ class AdminPages extends Controller
 
     public function untrash($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('deleted_at' => null));
 
@@ -283,7 +283,7 @@ class AdminPages extends Controller
 
     private function disable($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('enabled' => 0));
 
@@ -299,7 +299,7 @@ class AdminPages extends Controller
 
     private function enable($recordID = null)
     {
-        /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+        /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
         $model = $this->app->getModel('banners');
         $result = $model->update($recordID, array('enabled' => 1));
 

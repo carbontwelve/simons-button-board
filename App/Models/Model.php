@@ -1,8 +1,8 @@
-<?php namespace Carbontwelve\ButtonBoard\App\Models;
+<?php namespace Carbontwelve\ButtonBoard\Models;
 
 /**
  * Class Model
- * @package Carbontwelve\ButtonBoard\App\Models
+ * @package Carbontwelve\ButtonBoard\Models
  */
 abstract class Model
 {
@@ -15,7 +15,7 @@ abstract class Model
 
     /**
      * Local Instance of the App class
-     * @var \Carbontwelve\ButtonBoard\App\App  */
+     * @var \Carbontwelve\ButtonBoard\App  */
     protected $app;
 
     /**
@@ -50,9 +50,9 @@ abstract class Model
     /**
      * Initiate the Model
      * @param \wpdb $wpdb
-     * @param \Carbontwelve\ButtonBoard\App\App $app
+     * @param \Carbontwelve\ButtonBoard\App $app
      */
-    public function __construct(\wpdb $wpdb, \Carbontwelve\ButtonBoard\App\App $app)
+    public function __construct(\wpdb $wpdb, \Carbontwelve\ButtonBoard\App $app)
     {
         $this->wpdb = $wpdb;
         $this->app = $app;

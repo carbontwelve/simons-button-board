@@ -1,4 +1,4 @@
-<?php namespace Carbontwelve\ButtonBoard\App\Models;
+<?php namespace Carbontwelve\ButtonBoard\Models;
 
 
 interface ModelInterface

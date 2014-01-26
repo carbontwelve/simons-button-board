@@ -1,19 +1,19 @@
-<?php namespace Carbontwelve\ButtonBoard\App;
+<?php namespace Carbontwelve\ButtonBoard;
 
 /**
  * Class Rewrite
  *
- * @package Carbontwelve\ButtonBoard\App
+ * @package Carbontwelve\ButtonBoard
  * @link http://ruslanbes.com/devblog/2013/04/03/wordpress-routing-explained/
  */
 class Rewrite
 {
 
-    /** @var \Carbontwelve\ButtonBoard\App\App */
+    /** @var \Carbontwelve\ButtonBoard\App */
     protected $app;
 
     /**
-     * @param $app \Carbontwelve\ButtonBoard\App\App
+     * @param $app \Carbontwelve\ButtonBoard\App
      */
     public function __construct($app)
     {
@@ -40,7 +40,7 @@ class Rewrite
 
             $recordID = intval($query->get( 'banner_id' ));
 
-            /** @var \Carbontwelve\ButtonBoard\App\Models\Banners $model */
+            /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
             $model = $this->app->getModel('banners');
             $result = $model->get( $recordID );
 

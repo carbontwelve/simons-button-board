@@ -1,4 +1,4 @@
-<?php namespace Carbontwelve\ButtonBoard\App\Models;
+<?php namespace Carbontwelve\ButtonBoard\Models;
 
 class Banners extends Model implements ModelInterface
 {
@@ -78,7 +78,7 @@ class Banners extends Model implements ModelInterface
 				)";
             $this->wpdb->query($sql);
 
-        } elseif ($installedVersion != $this->version) {
+        } elseif ($installedVersion != $this->tableVersion) {
             // Upgrade our table
 
             // Upgrade sql will be here

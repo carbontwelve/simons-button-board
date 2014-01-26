@@ -1,4 +1,4 @@
-<?php namespace Carbontwelve\ButtonBoard\App;
+<?php namespace Carbontwelve\ButtonBoard;
 
 // Define our APP_PATH as used by the very simple view engine
 define(__NAMESPACE__ . '\APP_PATH', __DIR__);
@@ -9,7 +9,7 @@ class Start
 
     /**
      * Local Instance of the App class
-     * @var \Carbontwelve\ButtonBoard\App\App  */
+     * @var \Carbontwelve\ButtonBoard\App  */
     protected $app;
 
     /**
@@ -29,7 +29,7 @@ class Start
         );
 
         // Register Model
-        $this->app->registerModel('banners', '\\Carbontwelve\\ButtonBoard\\App\\Models\\Banners');
+        $this->app->registerModel('banners', '\\Carbontwelve\\ButtonBoard\\Models\\Banners');
 
         $this->rewriter = new Rewrite($this->app);
 
@@ -79,7 +79,7 @@ class Start
         // Add Pages to administration
         if (is_admin())
         {
-            new \Carbontwelve\ButtonBoard\App\Controllers\AdminPages($this->app);
+            new \Carbontwelve\ButtonBoard\Controllers\AdminPages($this->app);
         }
 
         // Register short codes

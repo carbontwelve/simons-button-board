@@ -1,11 +1,11 @@
-<?php namespace Carbontwelve\ButtonBoard\App\Controllers;
+<?php namespace Carbontwelve\ButtonBoard\Controllers;
 
 class Controller
 {
 
     /**
      * Local Instance of the App class
-     * @var \Carbontwelve\ButtonBoard\App\App  */
+     * @var \Carbontwelve\ButtonBoard\App  */
     protected $app;
 
     /**
@@ -19,10 +19,10 @@ class Controller
     );
 
     /**
-     * @param \Carbontwelve\ButtonBoard\App\App $app
+     * @param \Carbontwelve\ButtonBoard\App $app
      *
      */
-    public function __construct ( \Carbontwelve\ButtonBoard\App\App $app )
+    public function __construct ( \Carbontwelve\ButtonBoard\App $app )
     {
         $this->app = $app;
     }

@@ -1,8 +1,8 @@
-<?php namespace Carbontwelve\ButtonBoard\App;
+<?php namespace Carbontwelve\ButtonBoard;
 
 /**
  * Class ShortCode
- * @package Carbontwelve\ButtonBoard\App
+ * @package Carbontwelve\ButtonBoard
  */
 class ShortCode
 {

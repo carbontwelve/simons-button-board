@@ -16,9 +16,11 @@ use SplClassLoader;
 use Exception;
 
 // Include the PSR-0 Classloader
-require __DIR__ . '/Vendor/SplClassLoader.php';
+if ( ! class_exists('SplClassLoader')){
+    require __DIR__ . '/Vendor/SplClassLoader.php';
+}
 
-$loader = new SplClassLoader('Carbontwelve\ButtonBoard', __DIR__);
+$loader = new SplClassLoader('Carbontwelve\ButtonBoard', __DIR__ . '/App');
 if (!$loader->register()) {
     throw new Exception('Unable to initialize the autoloader.');
 }
@@ -29,7 +31,7 @@ if (!$loader->register()) {
 // http://wordpress.stackexchange.com/questions/63668/autoloading-namespaces-in-wordpress-plugins-themes-can-it-work
 
 // Start Button Board Plugin
-$buttonBoard = new \Carbontwelve\ButtonBoard\App\Start;
+$buttonBoard = new \Carbontwelve\ButtonBoard\Start;
 
 /**
  *

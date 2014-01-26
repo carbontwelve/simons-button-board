@@ -1,4 +1,4 @@
-<?php namespace Carbontwelve\ButtonBoard\App;
+<?php namespace Carbontwelve\ButtonBoard;
 
 /**
  * Class App
@@ -7,33 +7,64 @@
 Class App
 {
 
+    /**
+     * The App framework version
+     *
+     * @var string
+     */
+    const VERSION = '1.0.0';
+
     /** @var null|string Absolute path to App directory */
     protected $path;
+
     /** @var null|string URL To plugin root */
     protected $pluginUrl;
-    /** @var \Carbontwelve\ButtonBoard\App\View */
+
+    /**
+     * The View Service Provider
+     * @var \Carbontwelve\ButtonBoard\View
+     */
     protected $view;
-    /** @var array Loaded Models */
+
+    /**
+     * Loaded Models
+     * @var array
+     */
     protected $models = array();
-    /** @var \wpdb Wordpress database class */
+
+    /**
+     * Wordpress Database Class
+     * @var \wpdb
+     * */
     protected $wpdb;
-    /** @var \Carbontwelve\ButtonBoard\App\Rewrite  */
+
+    /**
+     * Wordpress Rewrite Service Provider
+     * @var \Carbontwelve\ButtonBoard\Rewrite
+     */
     protected $rewriter;
+
 
     /**
      * Setup our plugin environment
      * @param string|null $path
      * @param string|null $pluginUrl
      */
-    public function __construct($path = null, $pluginUrl = null)
+    public function __construct($path = null, $pluginUrl = null, $config = array())
     {
         /** @var \wpdb $wpdb */
         global $wpdb;
+
         $this->wpdb      = $wpdb;
         $this->path      = $path;
         $this->pluginUrl = $pluginUrl;
         $this->view      = new View($this->path . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR);
         $this->rewriter  = new Rewrite($this);
+
+        foreach ($config as $key => $value)
+        {
+            $this[$key] = $value;
+        }
     }
 
     /**
@@ -110,6 +141,29 @@ Class App
     public function renderView($template = '', $data = array())
     {
         return $this->view->render($template, $data);
+    }
+
+    /**
+     * Dynamically access application services.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this[$key];
+    }
+
+    /**
+     * Dynamically set application services.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function __set($key, $value)
+    {
+        $this[$key] = $value;
     }
 
 }
