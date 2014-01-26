@@ -202,7 +202,6 @@ class AdminPages extends Controller
             $this->flashMessages['error'] = "Sorry, your form could not be saved as its not valid. ";
             return $this->add();
         } else {
-
             /** @var \Carbontwelve\ButtonBoard\Models\Banners $model */
             $model = $this->app->getModel('banners');
             $result = $model->insert($this->flashMessages['inputs']);
