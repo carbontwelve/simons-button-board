@@ -42,6 +42,8 @@ class View
      */
     public function render($template, Array $data)
     {
+        $template = str_replace('.', DIRECTORY_SEPARATOR, $template);
+
         extract($data);
         ob_start();
         include($this->templateDirectory . $template . '.php');
